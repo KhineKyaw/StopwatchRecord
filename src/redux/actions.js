@@ -8,6 +8,7 @@ export const REMOVE_TASK = "REMOVE_TASK"
 export const UPDATE_TASKRECORDS = "UPDATE_TASKRECORDS"
 export const CLEAR_TASKRECORDS = "CLEAR_TASKRECORDS"
 export const REMOVE_TASKRECORD = "REMOVE_TASKRECORDS"
+export const SELECT_TASK = "SELECT_TASK"
 
 // stopwatch
 export const updateStopwatch = update => ({
@@ -31,6 +32,11 @@ export const clearTaskList = () => ({
 
 export const removeTask = update => ({
   type: REMOVE_TASK,
+  payload: update
+})
+
+export const selectTask = update => ({
+  type: SELECT_TASK,
   payload: update
 })
 

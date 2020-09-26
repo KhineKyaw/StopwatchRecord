@@ -4,6 +4,7 @@ import {
   UPDATE_STOPWATCH,
   CLEAR_STOPWATCH,
   UPDATE_TASKLIST,
+  SELECT_TASK,
   UPDATE_TASKRECORDS,
   CLEAR_TASKRECORDS,
   REMOVE_TASK,
@@ -22,14 +23,21 @@ const stopWatchReducer = (state = 0, action) => {
   }
 }
 
-const taskListReducer = (state = [], action) => {
+const INIT_TASK = {
+  data: [],
+  selected: {}
+}
+
+const taskListReducer = (state = INIT_TASK, action) => {
   switch (action.type) {
     case UPDATE_TASKLIST:
-      return [...state, action.payload]
+      return { ...state, data: [...state.data, action.payload] }
     case REMOVE_TASK:
-      return [...state].filter(task => task.id !== payload)
+      return { ...state, data: state.data.filter(task => task.id !== payload) }
+    case SELECT_TASK:
+      return { ...state, selected: action.payload }
     case CLEAR_TASKLIST:
-      return []
+      return {}
     default:
       return state
   }

@@ -1,6 +1,7 @@
 import React from "react"
 import { View, StyleSheet, TouchableOpacity } from "react-native"
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons"
+import { connect } from "react-redux"
 
 import RobotoText from "../components/RobotoText"
 import NativeFeedbackView from "../components/NativeFeedbackView"
@@ -17,7 +18,7 @@ const Header = props => (
       </View>
       <View style={styles.taskListView}>
         <RobotoText style={styles.taskList} numberOfLines={1}>
-          Lap
+          {props.taskList.selected.label || "Lap"}
         </RobotoText>
       </View>
     </TouchableOpacity>
@@ -68,4 +69,8 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Header
+const mapStateToProps = state => ({
+  taskList: state.task_list
+})
+
+export default connect(mapStateToProps)(Header)
