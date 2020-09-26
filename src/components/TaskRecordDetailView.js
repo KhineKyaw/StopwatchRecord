@@ -8,6 +8,7 @@ import NativeFeedbackView from "../components/NativeFeedbackView"
 import { FlatList } from "react-native-gesture-handler"
 import TaskRow from "./TaskRow"
 import TaskRecordDetailRow from "./TaskRecordDetailRow"
+import { color } from "react-native-reanimated"
 
 const TaskRecordDetailView = props => (
   <View style={styles.container}>
@@ -22,16 +23,28 @@ const TaskRecordDetailView = props => (
         </NativeFeedbackView>
       </View>
     </View>
+    <View style={styles.body}>
+      {props.taskRecords.length > 0 ? (
+        <FlatList
+          data={props.taskRecords}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={itemprops => (
+            <TaskRecordDetailRow
+              {...itemprops}
+              index={props.taskRecords.length - itemprops.index}
+            />
+          )}
+        />
+      ) : (
+        <View style={styles.emptyView}>
+          <RobotoText style={styles.emptyText}>NO RECORD</RobotoText>
+        </View>
+      )}
+    </View>
     <View style={styles.footer}>
-      <FlatList
-        data={props.taskRecords}
-        renderItem={itemprops => (
-          <TaskRecordDetailRow
-            {...itemprops}
-            index={props.taskRecords.length - itemprops.index}
-          />
-        )}
-      />
+      <NativeFeedbackView style={styles.clearButton} onPress={props.onClearAll}>
+        <RobotoText style={styles.clearBtnText}>CLEAR ALL</RobotoText>
+      </NativeFeedbackView>
     </View>
   </View>
 )
@@ -64,8 +77,35 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     color: colors.dark
   },
-  footer: {
+  body: {
     flex: 1
+  },
+  footer: {
+    height: "10%",
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    marginBottom: 10
+  },
+  clearButton: {
+    backgroundColor: "transparent",
+    borderColor: colors.primary,
+    borderWidth: 2,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  clearBtnText: {
+    color: colors.primary,
+    fontSize: 16,
+    fontFamily: "Roboto"
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  emptyText: {
+    color: colors.dark_transparent
   }
 })
 

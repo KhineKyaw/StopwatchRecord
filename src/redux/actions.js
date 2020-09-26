@@ -1,5 +1,3 @@
-import { colors } from "../constants"
-
 export const UPDATE_STOPWATCH = "UPDATE_STOPWATCH"
 export const CLEAR_STOPWATCH = "CLEAR_STOPWATCH"
 export const UPDATE_TASKLIST = "UPDATE_TASKLIST"

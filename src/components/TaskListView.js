@@ -38,6 +38,9 @@ const TaskListView = props => {
           renderItem={RadioItem}
         />
       </View>
+      <NativeFeedbackView style={styles.addButton}>
+        <AntDesign name='plus' color={colors.light} size={30} />
+      </NativeFeedbackView>
     </View>
   )
 }
@@ -73,6 +76,16 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 15
+  },
+  addButton: {
+    backgroundColor: colors.accent,
+    position: "absolute",
+    width: 58,
+    height: 58,
+    borderRadius: 58 / 2,
+    bottom: 15,
+    right: 15,
+    elevation: 6
   }
 })
 

@@ -12,12 +12,16 @@ import {
   CLEAR_TASKLIST
 } from "./actions"
 
-const stopWatchReducer = (state = 0, action) => {
+const INIT_STOPWATCH = {
+  timeMillis: 0
+}
+
+const stopWatchReducer = (state = INIT_STOPWATCH, action) => {
   switch (action.type) {
     case UPDATE_STOPWATCH:
-      return action.payload
+      return { ...state, timeMillis: action.payload }
     case CLEAR_STOPWATCH:
-      return 0
+      return INIT_STOPWATCH
     default:
       return state
   }
@@ -46,7 +50,7 @@ const taskListReducer = (state = INIT_TASK, action) => {
 const taskRecordsReducer = (state = [], action) => {
   switch (action.type) {
     case UPDATE_TASKRECORDS:
-      return [...state, action.payload]
+      return [action.payload, ...state]
     case REMOVE_TASKRECORD:
       return [...state].filter(task => task.id !== payload)
     case CLEAR_TASKRECORDS:

@@ -1,6 +1,5 @@
 class TimeRecord {
-  constructor(id, title, time) {
-    this.id = id
+  constructor(title, time) {
     this.title = title
     this.time = time
   }

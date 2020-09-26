@@ -14,6 +14,7 @@ import { connect } from "react-redux"
 import RobotoText from "../components/RobotoText"
 import TaskRow from "../components/TaskRow"
 import { colors, dimensions } from "../constants"
+import { color } from "react-native-reanimated"
 
 const animation_time = 1000
 
@@ -148,17 +149,26 @@ const Footer = props => {
             opacity: taskRecordsOpacity
           }}>
           <View style={styles.taskListContainer}>
-            <FlatList
-              style={styles.flatList}
-              data={props.taskRecords}
-              renderItem={itemprops => (
-                <TaskRow
-                  {...itemprops}
-                  onSelect={showTaskRecords ? props.onSelect : null}
-                />
-              )}
-              ListFooterComponent={<View style={{ marginVertical: 5 }}></View>}
-            />
+            {props.taskRecords.length > 0 ? (
+              <FlatList
+                style={styles.flatList}
+                data={props.taskRecords}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={itemprops => (
+                  <TaskRow
+                    {...itemprops}
+                    onSelect={showTaskRecords ? props.onSelect : null}
+                  />
+                )}
+                ListFooterComponent={
+                  <View style={{ marginVertical: 5 }}></View>
+                }
+              />
+            ) : (
+              <View style={styles.emptyView}>
+                <RobotoText style={styles.emptyText}>NO RECORD</RobotoText>
+              </View>
+            )}
           </View>
         </Animated.View>
       </Animated.View>
@@ -171,8 +181,6 @@ const topContinerHeight = 30
 const styles = StyleSheet.create({
   container: {
     height: dimensions.FOOTER_HEIGHT
-    // borderColor: "#ffffff60",
-    // borderWidth: 1
   },
   topBar: {
     alignItems: "center",
@@ -182,12 +190,10 @@ const styles = StyleSheet.create({
   updownIconConatiner: {
     width: "20%",
     height: topContinerHeight,
-    // backgroundColor: "#00000030",
     alignItems: "center",
     justifyContent: "center"
   },
   taskListContainer: {
-    // backgroundColor: "#00000020",
     height: dimensions.FOOTER_HEIGHT - topContinerHeight
   },
   title: {
@@ -202,6 +208,14 @@ const styles = StyleSheet.create({
   },
   flatList: {
     paddingHorizontal: 20
+  },
+  emptyView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  emptyText: {
+    color: colors.light_transparent_soft
   }
 })
 

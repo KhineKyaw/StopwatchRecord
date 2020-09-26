@@ -11,10 +11,11 @@ const TASK_RECORD_DETAIL_HEIGHT = HEIGHT * 0.09
 
 export const colors = {
   light: "#fff",
-  dark: "#000",
   light_transparent_strong: "#ffffffDA",
   light_transparent: "#ffffff80",
   light_transparent_soft: "#ffffff50",
+  dark: "#000",
+  dark_transparent: "#00000050",
   watch_background: "#ffffff1A",
 
   primary: "#5E57B4",
