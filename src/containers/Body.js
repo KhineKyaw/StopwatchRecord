@@ -12,7 +12,7 @@ import {
   clearStopwatch,
   updateTaskRecords
 } from "../redux/actions"
-import TimeRecord from "../model"
+import { TimeRecord } from "../model"
 
 const TIME_STEP = 1000
 
@@ -51,6 +51,7 @@ const Body = props => {
     if (props.stopWatch.timeMillis < 1000) return
     props.updateTaskRecords(
       new TimeRecord(
+        Date.now().toString(32),
         props.taskList.selected.label || "Lap",
         parseTimeMillis(props.stopWatch.timeMillis)
       )

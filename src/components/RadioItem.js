@@ -13,6 +13,12 @@ const RadioItem = props => {
 
   const itemSelectHandler = () => {
     props.onSelect(props.item)
+    props.onCancel()
+  }
+
+  const onItemRemove = () => {
+    props.onDelete(props.item.id)
+    if (props.checked) props.onSelect({ id: "0000", label: "Lap" })
   }
 
   return (
@@ -37,9 +43,12 @@ const RadioItem = props => {
           <RobotoText style={styles.text}>{props.item.label}</RobotoText>
         </View>
       </TouchableOpacity>
-      <View style={styles.removeIconConatiner}>
-        <MaterialIcons name='remove' size={22} color={colors.accent} />
-      </View>
+      <TouchableOpacity
+        style={styles.removeIconConatiner}
+        delayPressIn={0}
+        onPress={onItemRemove}>
+        <MaterialIcons name='remove' size={28} color={icon_color} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -71,6 +80,11 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     justifyContent: "center"
+  },
+  removeIconConatiner: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+    width: "12%"
   }
 })
 

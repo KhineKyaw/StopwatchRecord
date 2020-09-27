@@ -30,7 +30,7 @@ const TaskRecordsModal = props => {
         onCancel={props.onClose}
         taskRecords={props.taskRecords}
         onClearAll={onClearTaskHandler}
-        onDelete={removeTaskRecord}
+        onDelete={props.removeTaskRecord}
       />
     </Modal>
   )

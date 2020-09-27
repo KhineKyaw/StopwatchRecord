@@ -10,32 +10,41 @@ import { colors, dimensions, sizes } from "../constants"
 import NativeFeedbackView from "./NativeFeedbackView"
 import RobotoText from "./RobotoText"
 
-const TaskRecordDetailRow = props => (
-  <View style={styles.container}>
-    <NativeFeedbackView
-      style={styles.taskContent}
-      viewStyle={styles.viewStyle}
-      onPress={props.onSelect}>
-      <View style={styles.index}>
-        <RobotoText style={styles.indexText} numberOfLines={1}>
-          {props.index}
+const TaskRecordDetailRow = props => {
+  const itemOnDelete = () => {
+    props.onDelete(props.item.id)
+  }
+
+  return (
+    <View style={styles.container}>
+      <NativeFeedbackView
+        style={styles.taskContent}
+        viewStyle={styles.viewStyle}
+        onPress={props.onSelect}>
+        <View style={styles.index}>
+          <RobotoText style={styles.indexText} numberOfLines={1}>
+            {props.index}
+          </RobotoText>
+        </View>
+        <RobotoText style={styles.taskTitle} numberOfLines={2}>
+          {props.item.title}
         </RobotoText>
-      </View>
-      <RobotoText style={styles.taskTitle} numberOfLines={2}>
-        {props.item.title}
-      </RobotoText>
-      <RobotoText style={styles.taskTime}>{props.item.time}</RobotoText>
-    </NativeFeedbackView>
-    <TouchableOpacity style={styles.edit} delayPressIn={0}>
-      <MaterialCommunityIcons
-        name='delete-outline'
-        color={colors.primary_transparent}
-        size={sizes.control_icon}
-        size={22}
-      />
-    </TouchableOpacity>
-  </View>
-)
+        <RobotoText style={styles.taskTime}>{props.item.time}</RobotoText>
+      </NativeFeedbackView>
+      <TouchableOpacity
+        style={styles.edit}
+        delayPressIn={0}
+        onPress={itemOnDelete}>
+        <MaterialCommunityIcons
+          name='delete-outline'
+          color={colors.primary_transparent}
+          size={sizes.control_icon}
+          size={22}
+        />
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

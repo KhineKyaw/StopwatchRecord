@@ -6,9 +6,7 @@ import { colors } from "../constants"
 import RobotoText from "./RobotoText"
 import NativeFeedbackView from "../components/NativeFeedbackView"
 import { FlatList } from "react-native-gesture-handler"
-import TaskRow from "./TaskRow"
 import TaskRecordDetailRow from "./TaskRecordDetailRow"
-import { color } from "react-native-reanimated"
 
 const TaskRecordDetailView = props => (
   <View style={styles.container}>
@@ -27,10 +25,10 @@ const TaskRecordDetailView = props => (
       {props.taskRecords.length > 0 ? (
         <FlatList
           data={props.taskRecords}
-          keyExtractor={(item, index) => index.toString()}
           renderItem={itemprops => (
             <TaskRecordDetailRow
               {...itemprops}
+              onDelete={props.onDelete}
               index={props.taskRecords.length - itemprops.index}
             />
           )}

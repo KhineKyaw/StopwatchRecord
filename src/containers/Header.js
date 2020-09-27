@@ -35,8 +35,6 @@ const Header = props => (
 const styles = StyleSheet.create({
   container: {
     height: dimensions.HEADER_HEIGHT,
-    // borderColor: "#ffffff60",
-    // borderWidth: 1,
     alignItems: "center",
     flexDirection: "row"
   },

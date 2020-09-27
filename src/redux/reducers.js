@@ -35,9 +35,12 @@ const INIT_TASK = {
 const taskListReducer = (state = INIT_TASK, action) => {
   switch (action.type) {
     case UPDATE_TASKLIST:
-      return { ...state, data: [...state.data, action.payload] }
+      return { ...state, data: [action.payload, ...state.data] }
     case REMOVE_TASK:
-      return { ...state, data: state.data.filter(task => task.id !== payload) }
+      return {
+        ...state,
+        data: state.data.filter(task => task.id !== action.payload)
+      }
     case SELECT_TASK:
       return { ...state, selected: action.payload }
     case CLEAR_TASKLIST:
@@ -52,7 +55,7 @@ const taskRecordsReducer = (state = [], action) => {
     case UPDATE_TASKRECORDS:
       return [action.payload, ...state]
     case REMOVE_TASKRECORD:
-      return [...state].filter(task => task.id !== payload)
+      return [...state].filter(task => task.id !== action.payload)
     case CLEAR_TASKRECORDS:
       return []
     default:

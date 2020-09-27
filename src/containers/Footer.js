@@ -153,7 +153,6 @@ const Footer = props => {
               <FlatList
                 style={styles.flatList}
                 data={props.taskRecords}
-                keyExtractor={(item, index) => index.toString()}
                 renderItem={itemprops => (
                   <TaskRow
                     {...itemprops}
