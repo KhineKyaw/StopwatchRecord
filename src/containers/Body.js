@@ -1,6 +1,12 @@
 import { MaterialIcons } from "@expo/vector-icons"
 import React, { useEffect, useRef, useState } from "react"
-import { View, StyleSheet } from "react-native"
+import {
+  View,
+  StyleSheet,
+  Animated,
+  TouchableOpacity,
+  Easing
+} from "react-native"
 import { connect } from "react-redux"
 
 import NativeFeedbackView from "../components/NativeFeedbackView"
@@ -19,7 +25,10 @@ const TIME_STEP = 1000
 const Body = props => {
   const [timerRunning, setTimerRunning] = useState(false)
   const [timeUpdaterId, setTimeUpdaterId] = useState()
+  const [restarted, setRestarted] = useState(true)
   let timeMillisTemp = useRef(0)
+  let timeGap = useRef(0)
+  let prevMillis = useRef(0)
 
   const timeUpdateHandler = () => {
     timeMillisTemp.current = timeMillisTemp.current + TIME_STEP
@@ -28,6 +37,7 @@ const Body = props => {
 
   const createTimeUpdater = () => {
     setTimeUpdaterId(setInterval(timeUpdateHandler, TIME_STEP))
+    setRestarted(false)
   }
 
   const unmountTimeUpdater = () => {
@@ -37,39 +47,89 @@ const Body = props => {
   const resetStopWatch = () => {
     unmountTimeUpdater()
     setTimerRunning(false)
+    setRestarted(true)
+    watchZoomOut()
     props.clearStopwatch()
     timeMillisTemp.current = 0
+    prevMillis.current = 0
   }
 
   const toggleStartStop = () => {
     setTimerRunning(state => !state)
     if (timerRunning) unmountTimeUpdater()
     else createTimeUpdater()
+    toggleWatchAnimation()
   }
 
   const saveTaskRecord = () => {
-    if (props.stopWatch.timeMillis < 1000) return
+    timeGap.current = props.stopWatch.timeMillis
+    if (!restarted) {
+      timeGap.current = timeGap.current - prevMillis.current
+    }
+    if (timeGap.current < 1000) return
+
     props.updateTaskRecords(
       new TimeRecord(
         Date.now().toString(32),
         props.taskList.selected.label || "Lap",
-        parseTimeMillis(props.stopWatch.timeMillis)
+        parseTimeMillis(timeGap.current),
+        timeGap.current
       )
     )
+    prevMillis.current = props.stopWatch.timeMillis
   }
 
-  useEffect(() => {}, [timerRunning])
+  // Stopwatch Animation.
+  const [watchScale, _] = useState(new Animated.Value(0))
+  const animation_duration = 500
+
+  const watchZoomIn = () => {
+    Animated.timing(watchScale, {
+      toValue: 1,
+      duration: animation_duration,
+      easing: Easing.elastic(1.8),
+      useNativeDriver: true
+    }).start()
+  }
+
+  const watchZoomOut = () => {
+    Animated.timing(watchScale, {
+      toValue: 0,
+      duration: animation_duration,
+      easing: Easing.elastic(1.8),
+      useNativeDriver: true
+    }).start()
+  }
+
+  const toggleWatchAnimation = () => {
+    if (timerRunning) watchZoomOut()
+    else watchZoomIn()
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.watchWrapper}>
-        <NativeFeedbackView
-          style={styles.watchContainer}
-          onPress={toggleStartStop}>
-          <RobotoText style={styles.timeText}>
-            {parseTimeMillis(props.stopWatch.timeMillis)}
-          </RobotoText>
-        </NativeFeedbackView>
+        <Animated.View
+          style={{
+            transform: [
+              {
+                scale: watchScale.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.9, 1]
+                })
+              }
+            ]
+          }}>
+          <TouchableOpacity
+            style={styles.watchContainer}
+            activeOpacity={0.5}
+            onPressIn={toggleStartStop}
+            delayPressIn={0}>
+            <RobotoText style={styles.timeText}>
+              {parseTimeMillis(props.stopWatch.timeMillis)}
+            </RobotoText>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
       <View style={styles.controlContainer}>
         <NativeFeedbackView style={styles.controlIcon} onPress={resetStopWatch}>
@@ -116,11 +176,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.watch_background,
     width: dimensions.WATCH_DIM,
     height: dimensions.WATCH_DIM,
-    borderRadius: dimensions.WATCH_DIM / 2
+    borderRadius: dimensions.WATCH_DIM / 2,
+    justifyContent: "center",
+    alignItems: "center"
   },
   timeText: {
     fontFamily: "RobotoThin",
-    fontSize: 50
+    fontSize: 52
   },
   controlContainer: {
     flexDirection: "row",

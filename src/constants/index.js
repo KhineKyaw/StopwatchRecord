@@ -25,7 +25,8 @@ export const colors = {
 
 export const sizes = {
   header_font: 16,
-  control_icon: 24
+  control_icon: 24,
+  add_task_button: 58
 }
 
 export const dimensions = {
@@ -34,7 +35,7 @@ export const dimensions = {
   HEADER_HEIGHT: HEADER_HEIGHT,
   BODY_HEIGHT: BODY_HEIGHT,
   FOOTER_HEIGHT: FOOTER_HEIGHT,
-  WATCH_DIM: WIDTH * 0.64,
+  WATCH_DIM: WIDTH * 0.65,
   TASK_RECORD_HEIGHT: TASK_RECORD_HEIGHT,
   TASK_RECORD_DETAIL_HEIGHT: TASK_RECORD_DETAIL_HEIGHT,
 

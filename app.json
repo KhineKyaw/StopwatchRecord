@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "StopwatchRecord",
+    "name": "Stopwatch Record",
     "slug": "StopwatchRecord",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,7 +21,9 @@
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.abstractworks.stopwatchrecord",
+      "versionCode": 1
     }
   }
 }

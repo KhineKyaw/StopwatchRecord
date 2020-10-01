@@ -1,10 +1,6 @@
-import {
-  AntDesign,
-  MaterialCommunityIcons,
-  MaterialIcons
-} from "@expo/vector-icons"
-import React from "react"
-import { StyleSheet, View, TouchableOpacity } from "react-native"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import React, { useState } from "react"
+import { StyleSheet, View, TouchableOpacity, Animated } from "react-native"
 import { colors, dimensions, sizes } from "../constants"
 
 import NativeFeedbackView from "./NativeFeedbackView"
@@ -12,37 +8,65 @@ import RobotoText from "./RobotoText"
 
 const TaskRecordDetailRow = props => {
   const itemOnDelete = () => {
-    props.onDelete(props.item.id)
+    // props.onDelete(props.item.id)
+    fadeOutAnimation(() => props.onDelete(props.item.id))
+    // scaleDownHeightAniamtion()
+  }
+
+  // Animation
+  const itemOpacity = useState(new Animated.Value(1))[0]
+  const itemHeight = useState(new Animated.Value(1))[0]
+
+  const fadeOutAnimation = callback => {
+    Animated.timing(itemOpacity, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start(callback)
+  }
+
+  const scaleDownHeightAniamtion = callback => {
+    Animated.timing(itemHeight, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true
+    }).start(callback)
   }
 
   return (
-    <View style={styles.container}>
-      <NativeFeedbackView
-        style={styles.taskContent}
-        viewStyle={styles.viewStyle}
-        onPress={props.onSelect}>
-        <View style={styles.index}>
-          <RobotoText style={styles.indexText} numberOfLines={1}>
-            {props.index}
+    <Animated.View
+      style={{
+        opacity: itemOpacity,
+        transform: [{ scaleY: itemHeight }]
+      }}>
+      <View style={styles.container}>
+        <NativeFeedbackView
+          style={styles.taskContent}
+          viewStyle={styles.viewStyle}
+          onPress={props.onSelect}>
+          <View style={styles.index}>
+            <RobotoText style={styles.indexText} numberOfLines={1}>
+              {props.index}
+            </RobotoText>
+          </View>
+          <RobotoText style={styles.taskTitle} numberOfLines={2}>
+            {props.item.title}
           </RobotoText>
-        </View>
-        <RobotoText style={styles.taskTitle} numberOfLines={2}>
-          {props.item.title}
-        </RobotoText>
-        <RobotoText style={styles.taskTime}>{props.item.time}</RobotoText>
-      </NativeFeedbackView>
-      <TouchableOpacity
-        style={styles.edit}
-        delayPressIn={0}
-        onPress={itemOnDelete}>
-        <MaterialCommunityIcons
-          name='delete-outline'
-          color={colors.primary_transparent}
-          size={sizes.control_icon}
-          size={22}
-        />
-      </TouchableOpacity>
-    </View>
+          <RobotoText style={styles.taskTime}>{props.item.time}</RobotoText>
+        </NativeFeedbackView>
+        <TouchableOpacity
+          style={styles.edit}
+          delayPressIn={0}
+          onPress={itemOnDelete}>
+          <MaterialCommunityIcons
+            name='delete-outline'
+            color={colors.primary_transparent}
+            size={sizes.control_icon}
+            size={22}
+          />
+        </TouchableOpacity>
+      </View>
+    </Animated.View>
   )
 }
 

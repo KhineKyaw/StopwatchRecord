@@ -1,8 +1,9 @@
 export class TimeRecord {
-  constructor(id, title, time) {
+  constructor(id, title, time, millis) {
     this.id = id
     this.title = title
     this.time = time
+    this.millis = millis
   }
 }
 

@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   radioIconContainer: {
-    // backgroundColor: "#00000020",
-    width: "12%",
+    width: "14%",
     alignItems: "center",
     justifyContent: "center"
   },

@@ -1,16 +1,18 @@
 import { createStore, applyMiddleware } from "redux"
 import thunk from "redux-thunk"
+import AsyncStorage from "@react-native-community/async-storage"
+import { persistStore, persistReducer } from "redux-persist"
 
-import TimeRecord from "../model"
 import reducer from "./reducers"
-import { updateTaskRecords, updateTaskList, selectTask } from "./actions"
-import { radioFormData } from "../model"
 
-const store = new createStore(reducer, applyMiddleware(thunk))
+const persistConfig = {
+  key: "root",
+  storage: AsyncStorage
+}
 
-store.dispatch(updateTaskList(new radioFormData("01", "Python programming")))
-store.dispatch(updateTaskList(new radioFormData("02", "Reading book")))
-store.dispatch(updateTaskList(new radioFormData("03", "Body Training")))
+const persistedReducer = persistReducer(persistConfig, reducer)
 
-// store.dispatch(selectTask(2))
+export const store = new createStore(persistedReducer, applyMiddleware(thunk))
+export const persistor = persistStore(store)
+
 export default store

@@ -2,7 +2,7 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 import React, { useState } from "react"
 import { View, StyleSheet, Animated, Easing } from "react-native"
 
-import { colors, dimensions } from "../constants"
+import { colors, dimensions, sizes } from "../constants"
 import RobotoText from "./RobotoText"
 import NativeFeedbackView from "../components/NativeFeedbackView"
 import RadioListView from "./RadioListView"
@@ -20,15 +20,22 @@ const TaskListView = props => {
   const [inputRef, setinputRef] = useState(false)
 
   const { taskList } = props
-  const selectedIndex = taskList.data.indexOf(taskList.selected)
+  const selectedIndex = taskList.data.findIndex(
+    task => task.id === taskList.selected.id
+  )
 
   const inputValueHandler = text => {
     setInputValue(text)
   }
 
   const taskAddHandler = () => {
-    if (inputValue && inputValue.trim())
-      props.onTaskAdd(new radioFormData(Date.now().toString(32), inputValue))
+    if (inputValue && inputValue.trim()) {
+      const task = new radioFormData(Date.now().toString(32), inputValue)
+      props.onTaskAdd(task)
+      if (taskList.data.length === 0) {
+        props.onSelect(task)
+      }
+    }
     setInputValue("")
   }
 
@@ -196,9 +203,9 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: colors.accent,
-    width: 58,
-    height: 58,
-    borderRadius: 58 / 2,
+    width: sizes.add_task_button,
+    height: sizes.add_task_button,
+    borderRadius: sizes.add_task_button / 2,
     elevation: 6
   },
   addButtonAniContainer: {
@@ -216,7 +223,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     marginHorizontal: 5,
-    marginTop: 10
+    marginTop: 5
   },
   inputAniContainer: {
     flex: 1,

@@ -1,8 +1,7 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import { color } from "react-native-reanimated"
-import { colors } from "../constants"
+import { colors, sizes } from "../constants"
 
 class Input extends React.Component {
   render() {
@@ -22,7 +21,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderRadius: 40 / 2,
-    paddingHorizontal: 15,
+    paddingStart: 12,
+    paddingEnd: sizes.add_task_button / 2,
     borderColor: colors.primary,
     borderWidth: 1,
     backgroundColor: colors.light

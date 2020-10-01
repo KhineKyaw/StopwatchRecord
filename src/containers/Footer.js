@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons"
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import {
   View,
   StyleSheet,
@@ -8,24 +8,20 @@ import {
   Easing
 } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import NativeFeedbackView from "../components/NativeFeedbackView"
 import { connect } from "react-redux"
 
 import RobotoText from "../components/RobotoText"
 import TaskRow from "../components/TaskRow"
 import { colors, dimensions } from "../constants"
-import { color } from "react-native-reanimated"
 
 const animation_time = 1000
 
 const Footer = props => {
   const [showTaskRecords, setShowTaskRecords] = useState(true)
 
-  const [listPos, setListPos] = useState(new Animated.Value(0))
-  const [iconRot, setIconRot] = useState(new Animated.Value(0))
-  const [taskRecordsOpacity, setTaskRecordsOpacity] = useState(
-    new Animated.Value(1)
-  )
+  const listPos = useState(new Animated.Value(0))[0]
+  const iconRot = useState(new Animated.Value(0))[0]
+  const [taskRecordsOpacity, _] = useState(new Animated.Value(1))
 
   const toggleShowHide = () => {
     if (showTaskRecords) {
@@ -143,7 +139,6 @@ const Footer = props => {
             </Animated.View>
           </TouchableOpacity>
         </View>
-
         <Animated.View
           style={{
             opacity: taskRecordsOpacity
@@ -156,6 +151,7 @@ const Footer = props => {
                 renderItem={itemprops => (
                   <TaskRow
                     {...itemprops}
+                    index={props.taskRecords.length - itemprops.index}
                     onSelect={showTaskRecords ? props.onSelect : null}
                   />
                 )}
