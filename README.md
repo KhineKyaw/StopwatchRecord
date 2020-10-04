@@ -5,7 +5,7 @@ Image : not yet
 
 ## Why?
 
-Just for practice.
+For practice. Author is not satisfied with existing stopwatch apps.
 
 ## Powered by
 
