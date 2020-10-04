@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -26,16 +26,22 @@ const Body = props => {
   const [timerRunning, setTimerRunning] = useState(false)
   const [timeUpdaterId, setTimeUpdaterId] = useState()
   const [restarted, setRestarted] = useState(true)
-  let timeMillisTemp = useRef(0)
+  let timeMillisTemp = useRef(props.stopWatch.timeMillis)
   let timeGap = useRef(0)
   let prevMillis = useRef(0)
+  let dateTime = useRef(0)
 
   const timeUpdateHandler = () => {
-    timeMillisTemp.current = timeMillisTemp.current + TIME_STEP
+    const now = Date.now()
+    const netMillis = now - dateTime.current
+    dateTime.current = now
+
+    timeMillisTemp.current = timeMillisTemp.current + netMillis
     props.updateStopwatch(timeMillisTemp.current)
   }
 
   const createTimeUpdater = () => {
+    dateTime.current = Date.now()
     setTimeUpdaterId(setInterval(timeUpdateHandler, TIME_STEP))
     setRestarted(false)
   }
@@ -80,7 +86,8 @@ const Body = props => {
   }
 
   // Stopwatch Animation.
-  const [watchScale, _] = useState(new Animated.Value(0))
+  const watchScale = useState(new Animated.Value(0))[0]
+  const runWatchScale = useState(new Animated.Value(0))[0]
   const animation_duration = 500
 
   const watchZoomIn = () => {

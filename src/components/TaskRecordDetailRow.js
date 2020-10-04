@@ -8,14 +8,11 @@ import RobotoText from "./RobotoText"
 
 const TaskRecordDetailRow = props => {
   const itemOnDelete = () => {
-    // props.onDelete(props.item.id)
     fadeOutAnimation(() => props.onDelete(props.item.id))
-    // scaleDownHeightAniamtion()
   }
 
   // Animation
   const itemOpacity = useState(new Animated.Value(1))[0]
-  const itemHeight = useState(new Animated.Value(1))[0]
 
   const fadeOutAnimation = callback => {
     Animated.timing(itemOpacity, {
@@ -25,19 +22,11 @@ const TaskRecordDetailRow = props => {
     }).start(callback)
   }
 
-  const scaleDownHeightAniamtion = callback => {
-    Animated.timing(itemHeight, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: true
-    }).start(callback)
-  }
-
   return (
     <Animated.View
       style={{
         opacity: itemOpacity,
-        transform: [{ scaleY: itemHeight }]
+        transform: [{ scale: 1 }]
       }}>
       <View style={styles.container}>
         <NativeFeedbackView

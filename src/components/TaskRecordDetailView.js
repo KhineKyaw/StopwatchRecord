@@ -18,6 +18,7 @@ const TaskRecordDetailView = props => {
     (sum, task) => sum + task.millis,
     0
   )
+  const tasksExist = props.taskRecords.length > 0
 
   return (
     <View style={styles.container}>
@@ -33,7 +34,7 @@ const TaskRecordDetailView = props => {
         </View>
       </View>
       <View style={styles.body}>
-        {props.taskRecords.length > 0 ? (
+        {tasksExist ? (
           <FlatList
             data={props.taskRecords}
             renderItem={itemprops => (

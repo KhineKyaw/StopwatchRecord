@@ -13,12 +13,6 @@ const TaskRow = props => (
       viewStyle={styles.viewStyle}
       onPress={props.onSelect}>
       <View style={styles.edit} delayPressIn={0}>
-        {/* <MaterialIcons
-        name='edit'
-        color={colors.light_transparent}
-        size={sizes.control_icon}
-        size={20}
-      /> */}
         <RobotoText numberOfLines={1} ellipsizeMode='middle'>
           {props.index}
         </RobotoText>

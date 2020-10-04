@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -18,9 +18,12 @@ const animation_time = 1000
 
 const Footer = props => {
   const [showTaskRecords, setShowTaskRecords] = useState(true)
+  const [flatListRef, setFlatListRef] = useState()
 
+  // Animations
   const listPos = useState(new Animated.Value(0))[0]
   const iconRot = useState(new Animated.Value(0))[0]
+  const indicatorScale = useState(new Animated.Value(0))[0]
   const [taskRecordsOpacity, _] = useState(new Animated.Value(1))
 
   const toggleShowHide = () => {
@@ -64,7 +67,7 @@ const Footer = props => {
       toValue: 0,
       timing: animation_time,
       useNativeDriver: true,
-      Easing: Easing.cubic
+      easing: Easing.cubic
     }).start()
   }
 
@@ -81,9 +84,33 @@ const Footer = props => {
       toValue: 1,
       timing: animation_time,
       useNativeDriver: true,
-      Easing: Easing.cubic
+      easing: Easing.cubic
     }).start()
   }
+
+  //Task length indicator
+  const indicatorAnimation = callback => {
+    Animated.timing(indicatorScale, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+      easing: Easing.elastic(1.6)
+    }).start(callback)
+  }
+
+  const indicatorScaleDown = () => {
+    Animated.timing(indicatorScale, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+      easing: Easing.elastic(1.6)
+    }).start()
+  }
+
+  useEffect(() => {
+    if (flatListRef) flatListRef.scrollToIndex({ index: 0 })
+    indicatorAnimation(indicatorScaleDown)
+  }, [props.taskRecords])
 
   return (
     <View style={styles.container}>
@@ -102,7 +129,21 @@ const Footer = props => {
             onPressIn={toggleShowHide}>
             <Animated.View
               style={{
-                opacity: iconRot
+                opacity: iconRot,
+                transform: [
+                  {
+                    scale: indicatorScale.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [1, 1.46]
+                    })
+                  },
+                  {
+                    rotate: indicatorScale.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["0deg", "90deg"]
+                    })
+                  }
+                ]
               }}>
               <RobotoText style={styles.indicator}>
                 {props.taskRecords.length}
@@ -146,6 +187,12 @@ const Footer = props => {
           <View style={styles.taskListContainer}>
             {props.taskRecords.length > 0 ? (
               <FlatList
+                ref={ref => setFlatListRef(ref)}
+                getItemLayout={(data, index) => ({
+                  length: dimensions.TASK_RECORD_HEIGHT,
+                  offset: dimensions.TASK_RECORD_HEIGHT * index,
+                  index
+                })}
                 style={styles.flatList}
                 data={props.taskRecords}
                 renderItem={itemprops => (
