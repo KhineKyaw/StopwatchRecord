@@ -15,4 +15,4 @@ Just for practice.
 
 ## Todo
 
--  To eject expo
+- [ ] To eject expo
