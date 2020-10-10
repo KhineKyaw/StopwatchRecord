@@ -1,12 +1,12 @@
 import {
   AntDesign,
-  MaterialCommunityIcons,
-  MaterialIcons
+  FontAwesome5,
+  MaterialCommunityIcons
 } from "@expo/vector-icons"
 import React from "react"
 import { View, StyleSheet } from "react-native"
 
-import { colors } from "../constants"
+import { colors, sizes } from "../constants"
 import RobotoText from "./RobotoText"
 import NativeFeedbackView from "../components/NativeFeedbackView"
 import { FlatList } from "react-native-gesture-handler"
@@ -14,20 +14,40 @@ import TaskRecordDetailRow from "./TaskRecordDetailRow"
 import parseTimeMillis from "../general/parseTimeMillis"
 
 const TaskRecordDetailView = props => {
-  const time_total = props.taskRecords.reduce(
-    (sum, task) => sum + task.millis,
-    0
-  )
-  const tasksExist = props.taskRecords.length > 0
+  let taskRecords = props.taskRecords
+  if (props.taskRecords && props.sorted)
+    taskRecords = [...props.taskRecords].reverse()
+
+  const time_total = taskRecords.reduce((sum, task) => sum + task.millis, 0)
+  const sort_icon = props.sorted ? "sort-descending" : "sort-variant"
+  const { darkTheme } = props.theme
+  const tasksExist = taskRecords.length > 0
+  let dark_style = {}
+  let dark_text = {}
+
+  if (darkTheme) {
+    dark_style = { backgroundColor: colors.dark_theme_modal }
+    dark_text = { color: colors.light }
+  }
+
+  const togglSort = () => {
+    props.onSort()
+  }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, dark_style]}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <NativeFeedbackView style={styles.close}>
-            <MaterialIcons name='sort' color={colors.accent} size={28} />
+          <NativeFeedbackView style={styles.close} onPress={togglSort}>
+            <MaterialCommunityIcons
+              name={sort_icon}
+              color={colors.accent}
+              size={28}
+            />
           </NativeFeedbackView>
-          <RobotoText style={styles.title}>Records</RobotoText>
+          <RobotoText style={{ ...styles.title, ...dark_text }}>
+            Records
+          </RobotoText>
           <NativeFeedbackView style={styles.close} onPress={props.onCancel}>
             <AntDesign name='close' color={colors.accent} size={28} />
           </NativeFeedbackView>
@@ -36,18 +56,28 @@ const TaskRecordDetailView = props => {
       <View style={styles.body}>
         {tasksExist ? (
           <FlatList
-            data={props.taskRecords}
+            data={taskRecords}
             renderItem={itemprops => (
               <TaskRecordDetailRow
                 {...itemprops}
+                theme={props.theme}
                 onDelete={props.onDelete}
-                index={props.taskRecords.length - itemprops.index}
+                index={
+                  props.sorted
+                    ? itemprops.index + 1
+                    : taskRecords.length - itemprops.index
+                }
               />
             )}
           />
         ) : (
           <View style={styles.emptyView}>
-            <RobotoText style={styles.emptyText}>NO RECORD</RobotoText>
+            {/* <RobotoText style={styles.emptyText}>NO RECORD</RobotoText> */}
+            <FontAwesome5
+              name='carrot'
+              color={colors.primary_transparent}
+              size={sizes.carrot_icon}
+            />
           </View>
         )}
       </View>
@@ -58,14 +88,16 @@ const TaskRecordDetailView = props => {
           size={28}
         />
         <View style={styles.sumTextContainer}>
-          <RobotoText style={styles.sumText}>
+          <RobotoText style={{ ...styles.sumText, ...dark_text }}>
             {parseTimeMillis(time_total)}
           </RobotoText>
         </View>
         <NativeFeedbackView
-          style={styles.clearButton}
+          style={darkTheme ? styles.clearButtonDark : styles.clearButton}
           onPress={props.onClearAll}>
-          <RobotoText style={styles.clearBtnText}>CLEAR ALL</RobotoText>
+          <RobotoText style={{ ...styles.clearBtnText, ...dark_text }}>
+            CLEAR ALL
+          </RobotoText>
         </NativeFeedbackView>
       </View>
     </View>
@@ -101,7 +133,8 @@ const styles = StyleSheet.create({
     color: colors.dark
   },
   body: {
-    flex: 1
+    flex: 1,
+    paddingTop: 6
   },
   footer: {
     height: "10%",
@@ -116,6 +149,15 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderColor: colors.primary,
     borderWidth: 2,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 100
+  },
+  clearButtonDark: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    borderWidth: 0,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",

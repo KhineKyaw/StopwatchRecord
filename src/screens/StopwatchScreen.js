@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet, View, Dimensions } from "react-native"
 import Constants from "expo-constants"
 
@@ -12,11 +12,16 @@ import Footer from "../containers/Footer"
 import TaskListModal from "../containers/TaskListModal"
 import TaskRecordsModal from "../containers/TaskRecordsModal"
 import LoadingScreen from "./LoadingScreen"
+import { connect } from "react-redux"
 
 const StopwatchScreen = props => {
   const [appStart, setAppStart] = useState(false)
   const [showTaskList, setShowTaskList] = useState(false)
   const [showTaskRecords, setShowTaskRecords] = useState(false)
+
+  let gradient_colors = [colors.accent, colors.primary]
+  if (props.theme.darkTheme)
+    gradient_colors = [colors.dark_theme_primary, colors.dark_theme_primary]
 
   const toggleTaskListHandler = () => {
     setShowTaskList(show => !show)
@@ -36,10 +41,7 @@ const StopwatchScreen = props => {
 
   return appStart ? (
     <View style={styles.container}>
-      <LinearGradient
-        colors={[colors.accent, colors.primary]}
-        style={styles.gradient}
-      />
+      <LinearGradient colors={gradient_colors} style={styles.gradient} />
       <Header onTap={toggleTaskListHandler} />
       <Body />
       <Footer onSelect={toggleTaskRecordsHandler} />
@@ -59,6 +61,12 @@ const StopwatchScreen = props => {
   )
 }
 
+const mapStateToProps = state => ({
+  theme: state.theme
+})
+
+export default connect(mapStateToProps)(StopwatchScreen)
+
 const HEIGHT = Dimensions.get("window").height
 
 const styles = StyleSheet.create({
@@ -74,5 +82,3 @@ const styles = StyleSheet.create({
     height: HEIGHT
   }
 })
-
-export default StopwatchScreen

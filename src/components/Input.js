@@ -7,11 +7,11 @@ class Input extends React.Component {
   render() {
     return (
       <TextInput
-        style={[styles.input, { ...this.props.style }]}
+        {...this.props}
+        style={{ ...styles.input, ...this.props.style }}
         placeholderTextColor={colors.primary_transparent}
         ref={input => this.props.getRef(input)}
         blurOnSubmit={false}
-        {...this.props}
       />
     )
   }

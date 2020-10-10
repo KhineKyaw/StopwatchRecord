@@ -4,7 +4,11 @@ import Modal from "react-native-modal"
 import { connect } from "react-redux"
 
 import TaskRecordDetailView from "../components/TaskRecordDetailView"
-import { clearTaskRecords, removeTaskRecord } from "../redux/actions"
+import {
+  clearTaskRecords,
+  removeTaskRecord,
+  sortTaskRecords
+} from "../redux/actions"
 
 const TaskRecordsModal = props => {
   const onClearTaskHandler = () => {
@@ -31,6 +35,9 @@ const TaskRecordsModal = props => {
         taskRecords={props.taskRecords}
         onClearAll={onClearTaskHandler}
         onDelete={props.removeTaskRecord}
+        onSort={props.sortTaskRecords}
+        sorted={props.sorted}
+        theme={props.theme}
       />
     </Modal>
   )
@@ -43,9 +50,13 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-  taskRecords: state.task_records
+  taskRecords: state.task_records.taskRecords,
+  sorted: state.task_records.sorted,
+  theme: state.theme
 })
 
-export default connect(mapStateToProps, { clearTaskRecords, removeTaskRecord })(
-  TaskRecordsModal
-)
+export default connect(mapStateToProps, {
+  clearTaskRecords,
+  removeTaskRecord,
+  sortTaskRecords
+})(TaskRecordsModal)

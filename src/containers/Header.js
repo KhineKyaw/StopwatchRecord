@@ -6,31 +6,42 @@ import { connect } from "react-redux"
 import RobotoText from "../components/RobotoText"
 import NativeFeedbackView from "../components/NativeFeedbackView"
 import { colors, dimensions, sizes } from "../constants"
+import { toggleTheme } from "../redux/actions"
 
-const Header = props => (
-  <View style={styles.container}>
-    <TouchableOpacity
-      style={styles.taskListContainer}
-      delayPressIn={0}
-      onPress={props.onTap}>
-      <View style={styles.circleoIconContainer}>
-        <AntDesign name='downcircleo' color={colors.light} size={21} />
-      </View>
-      <View style={styles.taskListView}>
-        <RobotoText style={styles.taskList} numberOfLines={1}>
-          {props.taskList.selected.label || "Lap"}
-        </RobotoText>
-      </View>
-    </TouchableOpacity>
-    <NativeFeedbackView style={styles.nightIconContainer}>
-      <MaterialCommunityIcons
-        name='weather-night'
-        color={colors.light}
-        size={26}
-      />
-    </NativeFeedbackView>
-  </View>
-)
+const Header = props => {
+  const theme_icon = props.theme.darkTheme ? "weather-sunny" : "weather-night"
+
+  const change_theme = () => {
+    props.toggleTheme()
+  }
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.taskListContainer}
+        delayPressIn={0}
+        onPress={props.onTap}>
+        <View style={styles.circleoIconContainer}>
+          <AntDesign name='downcircleo' color={colors.light} size={21} />
+        </View>
+        <View style={styles.taskListView}>
+          <RobotoText style={styles.taskList} numberOfLines={1}>
+            {props.taskList.selected.label || "Lap"}
+          </RobotoText>
+        </View>
+      </TouchableOpacity>
+      <NativeFeedbackView
+        style={styles.nightIconContainer}
+        onPress={change_theme}>
+        <MaterialCommunityIcons
+          name={theme_icon}
+          color={colors.light}
+          size={26}
+        />
+      </NativeFeedbackView>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -68,7 +79,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-  taskList: state.task_list
+  taskList: state.task_list,
+  theme: state.theme
 })
 
-export default connect(mapStateToProps)(Header)
+export default connect(mapStateToProps, { toggleTheme })(Header)

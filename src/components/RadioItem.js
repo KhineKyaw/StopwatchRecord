@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons"
 import React from "react"
 import { StyleSheet, View, TouchableOpacity } from "react-native"
+import { color } from "react-native-reanimated"
 
 import { colors, dimensions } from "../constants"
 import RobotoText from "./RobotoText"
@@ -10,6 +11,8 @@ const RadioItem = props => {
     ? ["checked", colors.accent]
     : ["unchecked", "gray"]
   const border_color = props.checked ? colors.accent : "#00000020"
+
+  const dark_text = props.theme.darkTheme ? { color: colors.light } : {}
 
   const itemSelectHandler = () => {
     props.onSelect(props.item)
@@ -40,7 +43,9 @@ const RadioItem = props => {
           delayPressIn={0}
           activeOpacity={0.5}
           onPress={itemSelectHandler}>
-          <RobotoText style={styles.text}>{props.item.label}</RobotoText>
+          <RobotoText style={{ ...styles.text, ...dark_text }}>
+            {props.item.label}
+          </RobotoText>
         </View>
       </TouchableOpacity>
       <TouchableOpacity

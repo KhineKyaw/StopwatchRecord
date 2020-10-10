@@ -13,6 +13,9 @@ import { radioFormData } from "../model"
 const ANIMATED_TIMING = 500
 const EASING_BEZIER = Easing.bezier(0.42, 0.01, 0.61, 1)
 
+// compare two contacts for alphabetizing
+const compareLabel = (item1, item2) => (item1.label > item2.label ? 1 : -1)
+
 const TaskListView = props => {
   const [inputValue, setInputValue] = useState()
   const [addIconAnival, _] = useState(new Animated.Value(1))
@@ -20,9 +23,23 @@ const TaskListView = props => {
   const [inputRef, setinputRef] = useState(false)
 
   const { taskList } = props
-  const selectedIndex = taskList.data.findIndex(
-    task => task.id === taskList.selected.id
-  )
+  let data = [...taskList.data]
+  if (data && props.sorted) data = data.sort(compareLabel)
+  const selectedIndex = data.findIndex(task => task.id === taskList.selected.id)
+  const sort_icon = props.sorted ? "sort-by-alpha" : "sort"
+
+  const { darkTheme } = props.theme
+  let dark_style = {}
+  let dark_text = {}
+
+  if (darkTheme) {
+    dark_style = { backgroundColor: colors.dark_theme_modal }
+    dark_text = { color: colors.light }
+  }
+
+  const sortTasksAlpha = () => {
+    props.onSort()
+  }
 
   const inputValueHandler = text => {
     setInputValue(text)
@@ -32,7 +49,7 @@ const TaskListView = props => {
     if (inputValue && inputValue.trim()) {
       const task = new radioFormData(Date.now().toString(32), inputValue)
       props.onTaskAdd(task)
-      if (taskList.data.length === 0) {
+      if (data.length === 0) {
         props.onSelect(task)
       }
     }
@@ -70,13 +87,15 @@ const TaskListView = props => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, dark_style]}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <NativeFeedbackView style={styles.close}>
-            <MaterialIcons name='sort' color={colors.accent} size={28} />
+          <NativeFeedbackView style={styles.close} onPress={sortTasksAlpha}>
+            <MaterialIcons name={sort_icon} color={colors.accent} size={28} />
           </NativeFeedbackView>
-          <RobotoText style={styles.title}>Tasks List</RobotoText>
+          <RobotoText style={{ ...styles.title, ...dark_text }}>
+            Tasks List
+          </RobotoText>
           <NativeFeedbackView style={styles.close} onPress={props.onCancel}>
             <AntDesign name='close' color={colors.accent} size={28} />
           </NativeFeedbackView>
@@ -85,11 +104,12 @@ const TaskListView = props => {
       <View style={styles.body}>
         {props.taskList.data.length > 0 ? (
           <RadioListView
-            data={props.taskList.data}
+            data={data}
             selectedIndex={selectedIndex}
             renderItem={itemprop => (
               <RadioItem
                 {...itemprop}
+                theme={props.theme}
                 onCancel={props.onCancel}
                 onSelect={props.onSelect}
                 onDelete={props.onDelete}
@@ -121,6 +141,7 @@ const TaskListView = props => {
               }
             ]}>
             <Input
+              style={darkTheme ? styles.darkInput : {}}
               value={inputValue}
               placeholder='Task'
               onChangeText={inputValueHandler}
@@ -234,6 +255,16 @@ const styles = StyleSheet.create({
     height: 40,
     overflow: "hidden",
     marginEnd: 20
+  },
+  darkInput: {
+    flex: 1,
+    color: colors.light,
+    borderRadius: 40 / 2,
+    paddingStart: 12,
+    paddingEnd: sizes.add_task_button / 2,
+    borderColor: colors.primary,
+    borderWidth: 1,
+    backgroundColor: colors.dark_theme_modal
   },
   footer: {
     // backgroundColor: "#8762c180",

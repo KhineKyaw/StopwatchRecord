@@ -1,4 +1,4 @@
-import { Entypo } from "@expo/vector-icons"
+import { Entypo, FontAwesome5 } from "@expo/vector-icons"
 import React, { useEffect, useState } from "react"
 import {
   View,
@@ -12,27 +12,27 @@ import { connect } from "react-redux"
 
 import RobotoText from "../components/RobotoText"
 import TaskRow from "../components/TaskRow"
-import { colors, dimensions } from "../constants"
+import { colors, dimensions, sizes } from "../constants"
+import { toggleTaskRecord } from "../redux/actions"
 
 const animation_time = 1000
 
 const Footer = props => {
-  const [showTaskRecords, setShowTaskRecords] = useState(true)
+  const { showTaskRecords } = props.uiStates
   const [flatListRef, setFlatListRef] = useState()
 
   // Animations
-  const listPos = useState(new Animated.Value(0))[0]
-  const iconRot = useState(new Animated.Value(0))[0]
+  const initialValue = showTaskRecords ? 0 : 1
+  const iconRot = useState(new Animated.Value(initialValue))[0]
   const indicatorScale = useState(new Animated.Value(0))[0]
-  const [taskRecordsOpacity, _] = useState(new Animated.Value(1))
 
   const toggleShowHide = () => {
     if (showTaskRecords) {
-      taskRecordHideAnimation()
       hideIconAnimation()
+      props.toggleTaskRecord()
     } else {
-      taskRecordShowAnimation()
       showIconAnimation()
+      props.toggleTaskRecord()
     }
   }
 
@@ -51,40 +51,6 @@ const Footer = props => {
       timing: animation_time,
       easing: Easing.elastic(0.9),
       useNativeDriver: true
-    }).start()
-  }
-
-  const taskRecordHideAnimation = () => {
-    setShowTaskRecords(false)
-    Animated.timing(listPos, {
-      toValue: dimensions.FOOTER_HEIGHT * 0.78,
-      timing: animation_time,
-      easing: Easing.elastic(0.9),
-      useNativeDriver: true
-    }).start()
-
-    Animated.timing(taskRecordsOpacity, {
-      toValue: 0,
-      timing: animation_time,
-      useNativeDriver: true,
-      easing: Easing.cubic
-    }).start()
-  }
-
-  const taskRecordShowAnimation = () => {
-    setShowTaskRecords(true)
-    Animated.timing(listPos, {
-      toValue: 0,
-      timing: animation_time,
-      easing: Easing.elastic(0.85),
-      useNativeDriver: true
-    }).start()
-
-    Animated.timing(taskRecordsOpacity, {
-      toValue: 1,
-      timing: animation_time,
-      useNativeDriver: true,
-      easing: Easing.cubic
     }).start()
   }
 
@@ -118,7 +84,10 @@ const Footer = props => {
         style={{
           transform: [
             {
-              translateY: listPos
+              translateY: iconRot.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, dimensions.FOOTER_HEIGHT * 0.78]
+              })
             }
           ]
         }}>
@@ -182,7 +151,10 @@ const Footer = props => {
         </View>
         <Animated.View
           style={{
-            opacity: taskRecordsOpacity
+            opacity: iconRot.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0]
+            })
           }}>
           <View style={styles.taskListContainer}>
             {props.taskRecords.length > 0 ? (
@@ -208,7 +180,12 @@ const Footer = props => {
               />
             ) : (
               <View style={styles.emptyView}>
-                <RobotoText style={styles.emptyText}>NO RECORD</RobotoText>
+                {/* <RobotoText style={styles.emptyText}>NO RECORD</RobotoText> */}
+                <FontAwesome5
+                  name='carrot'
+                  color={colors.light_transparent_soft}
+                  size={sizes.carrot_icon}
+                />
               </View>
             )}
           </View>
@@ -217,6 +194,13 @@ const Footer = props => {
     </View>
   )
 }
+
+const mapStateToProps = state => ({
+  taskRecords: state.task_records.taskRecords,
+  uiStates: state.ui_states
+})
+
+export default connect(mapStateToProps, { toggleTaskRecord })(Footer)
 
 const topContinerHeight = 30
 
@@ -260,9 +244,3 @@ const styles = StyleSheet.create({
     color: colors.light_transparent_soft
   }
 })
-
-const mapStateToProps = state => ({
-  taskRecords: state.task_records
-})
-
-export default connect(mapStateToProps)(Footer)

@@ -3,7 +3,12 @@ import Modal from "react-native-modal"
 import { connect } from "react-redux"
 
 import TaskListView from "../components/TaskListView"
-import { selectTask, removeTask, updateTaskList } from "../redux/actions"
+import {
+  selectTask,
+  removeTask,
+  updateTaskList,
+  sortTaskList
+} from "../redux/actions"
 
 const TaskListModal = props => (
   <Modal
@@ -25,16 +30,21 @@ const TaskListModal = props => (
       onSelect={props.selectTask}
       onDelete={props.removeTask}
       onTaskAdd={props.updateTaskList}
+      onSort={props.sortTaskList}
+      sorted={props.taskList.sorted}
+      theme={props.theme}
     />
   </Modal>
 )
 
 const mapStateToProps = state => ({
-  taskList: state.task_list
+  taskList: state.task_list,
+  theme: state.theme
 })
 
 export default connect(mapStateToProps, {
   selectTask,
   removeTask,
-  updateTaskList
+  updateTaskList,
+  sortTaskList
 })(TaskListModal)

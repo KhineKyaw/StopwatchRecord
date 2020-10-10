@@ -18,6 +18,9 @@ export const colors = {
   dark_transparent: "#00000050",
   watch_background: "#ffffff1A",
 
+  dark_theme_primary: "#27263f",
+  dark_theme_modal: "#222222",
+
   primary: "#5E57B4",
   primary_transparent: "#5E57B4A0",
   accent: "#8762C1"
@@ -26,7 +29,8 @@ export const colors = {
 export const sizes = {
   header_font: 16,
   control_icon: 24,
-  add_task_button: 58
+  add_task_button: 58,
+  carrot_icon: 26
 }
 
 export const dimensions = {

@@ -11,6 +11,8 @@ const TaskRecordDetailRow = props => {
     fadeOutAnimation(() => props.onDelete(props.item.id))
   }
 
+  const dark_text = props.theme.darkTheme ? { color: colors.light } : {}
+
   // Animation
   const itemOpacity = useState(new Animated.Value(1))[0]
 
@@ -38,10 +40,14 @@ const TaskRecordDetailRow = props => {
               {props.index}
             </RobotoText>
           </View>
-          <RobotoText style={styles.taskTitle} numberOfLines={2}>
+          <RobotoText
+            style={{ ...styles.taskTitle, ...dark_text }}
+            numberOfLines={2}>
             {props.item.title}
           </RobotoText>
-          <RobotoText style={styles.taskTime}>{props.item.time}</RobotoText>
+          <RobotoText style={{ ...styles.taskTime, ...dark_text }}>
+            {props.item.time}
+          </RobotoText>
         </NativeFeedbackView>
         <TouchableOpacity
           style={styles.edit}
