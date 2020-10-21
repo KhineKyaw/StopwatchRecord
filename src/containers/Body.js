@@ -135,6 +135,9 @@ const Body = props => {
             <RobotoText style={styles.timeText}>
               {parseTimeMillis(props.stopWatch.timeMillis)}
             </RobotoText>
+            <RobotoText style={styles.startStopText}>
+              {!timerRunning ? "START" : "STOP"}
+            </RobotoText>
           </TouchableOpacity>
         </Animated.View>
       </View>
@@ -205,5 +208,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.light,
     borderRadius: dimensions.CONTROL_ICON_DIM / 2
+  },
+  startStopText: {
+    fontFamily: "RobotoLight",
+    position: "absolute",
+    bottom: dimensions.WATCH_DIM / 5,
+    color: colors.light
   }
 })

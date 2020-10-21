@@ -6,8 +6,7 @@ const fetchFonts = () =>
     RobotoLight: require("../../assets/fonts/Roboto-Light.ttf"),
     RobotoThin: require("../../assets/fonts/Roboto-Thin.ttf"),
     RobotoMedium: require("../../assets/fonts/Roboto-Medium.ttf"),
-    RobotoBold: require("../../assets/fonts/Roboto-Bold.ttf"),
-    OpenSans: require("../../assets/fonts/OpenSans-Regular.ttf")
+    RobotoBold: require("../../assets/fonts/Roboto-Bold.ttf")
   })
 
 export default fetchFonts
