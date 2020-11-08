@@ -17,4 +17,4 @@ For practice. Author is not satisfied with existing stopwatch apps.
 
 ## Todo
 
-- [ ] To eject expo
+- [ ] Eject Expo
