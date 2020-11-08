@@ -1,6 +1,6 @@
 ## Stopwatch Record
 <p align="center">
-  <img width="180" height="180" src="https://github.com/KhineKyaw/StopwatchRecord/blob/master/assets/icon.png"/>
+  <img width="160" height="160" src="https://github.com/KhineKyaw/StopwatchRecord/blob/master/assets/icon.png"/>
 </p>
 <p align="center">Stopwatch Record is a time recording app.</p>
 
