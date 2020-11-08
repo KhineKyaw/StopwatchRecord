@@ -1,5 +1,7 @@
 ## Stopwatch Record
-Image : not yet
+<p align="center">
+  <img src="https://github.com/KhineKyaw/StopwatchRecord/blob/master/assets/icon.png"/>
+</p>
 <p align="center">Stopwatch Record is a time recording app.</p>
 
 
